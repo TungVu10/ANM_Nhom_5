@@ -1,0 +1,139 @@
+﻿<Window x:Class="VD2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ứng dụng mã hóa và giải mã dữ liệu theo chuẩn DES" Height="601" Width="1000" Background="#FFFAFAFA" WindowStartupLocation="CenterScreen">
+
+    <!-- Style dùng chung cho tất cả Button -->
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="10"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <!-- KHUNG 1: Nhập khóa -->
+        <StackPanel Grid.Column="0">
+            <!-- Tiêu đề của khung -->
+            <TextBlock Text="🔐 TẠO KHÓA" FontSize="16" FontWeight="Bold" 
+               Foreground="#0D47A1" Margin="0,0,0,5" TextAlignment="Center"/>
+
+            <!-- Khung chính -->
+            <Border Background="#FFB3E5FC" CornerRadius="15" Padding="10" Margin="5,20,5,5" Height="418">
+                <StackPanel VerticalAlignment="Center">
+                    <!-- Chế độ nhập khóa -->
+                    <TextBlock Text="Chế độ nhập khóa:" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,10">
+                        <RadioButton x:Name="rdoNhapTay" Content="Nhập tay" Margin="0,0,10,0" 
+                             IsChecked="True" Checked="rdo_Checked"/>
+                        <RadioButton x:Name="rdoSinhTuDong" Content="Sinh tự động" Checked="rdo_Checked"/>
+                    </StackPanel>
+
+                    <!-- Nhập khóa -->
+                    <TextBlock Text="Khóa:" Margin="0,0,0,5" FontWeight="Bold"/>
+                    <TextBox x:Name="txtKey" Height="96" FontSize="14" Padding="5" 
+                     Background="White" BorderBrush="Gray" BorderThickness="1" 
+                     PreviewMouseDown="txtKey_PreviewMouseDown" 
+                     TextChanged="txtKey_TextChanged"/>
+
+                    <!-- Nút sinh khóa -->
+                    <Button Content="Sinh khóa ngẫu nhiên" Height="31" Margin="0,10,0,0"
+                    Background="#FF0288D1" Foreground="White" 
+                    Click="btnGenerateKey_Click" Width="197"/>
+
+                    <!-- Nút Reset -->
+                    <Button Content="Reset" Height="31" Width="120" Margin="45,10,45,0"
+                    Background="#FFDCE775" Foreground="Black"
+                    BorderBrush="#FBC02D" BorderThickness="1"
+                    FontWeight="Bold" Click="btnReset_Click"
+                    HorizontalAlignment="Center" Cursor="Hand"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+
+        <!-- KHUNG 2: MÃ HÓA DỮ LIỆU -->
+        <StackPanel Grid.Column="2">
+            <!-- ✅ Tiêu đề cho khung -->
+            <TextBlock Text="🔒 MÃ HÓA DỮ LIỆU"
+               FontSize="16" FontWeight="Bold"
+               Foreground="#0D47A1" Margin="0,0,0,5"
+               TextAlignment="Center" HorizontalAlignment="Center"/>
+
+            <!-- Nội dung khung giữ nguyên, chỉ bao bên ngoài bằng Border -->
+            <Border Background="#FFC8E6C9" CornerRadius="15" Padding="10" Margin="5,0,5,5" MinHeight="500" Height="509">
+                <StackPanel>
+                    <TextBlock Text="Bản rõ:" Margin="0,0,0,5" FontWeight="Bold"/>
+                    <TextBox x:Name="txtPlainText" Height="125" FontSize="14" 
+                     AcceptsReturn="True" TextWrapping="Wrap" 
+                     Background="White" Padding="5" />
+                    <Button Content="Mở File" Width="100" Height="30" Margin="10,10,0,0"
+                    Background="#FF6A1B9A" Foreground="White" Click="btnOpenFile_Click"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="80,10,0,0" HorizontalAlignment="Left" Width="134">
+                        <Button Content="Mã hóa" Width="130" Height="30" 
+                        Background="#FF388E3C" Foreground="White" Click="btnEncrypt_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Bản mã (sau mã hóa):" Margin="0,10,0,5" FontWeight="Bold"/>
+                    <TextBox x:Name="txtEncryptedText" Height="130" FontSize="14"
+                     AcceptsReturn="True" TextWrapping="Wrap"
+                     Background="White" Padding="5" IsReadOnly="True" />
+                    <Button Content="Chuyển sang bản mã" Width="150" Height="30" Margin="15"
+                Background="#FF689F38" Foreground="White" Click="btnMoveToCipher_Click"/>
+                    <Button Content="Lưu File" Width="120" Height="30" Background="#FF0288D1" Foreground="White" Click="btnSaveFile_Click"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+
+        <!-- KHUNG 3: GIẢI MÃ DỮ LIỆU -->
+        <StackPanel Grid.Column="3">
+            <!-- Tiêu đề khung -->
+            <TextBlock Text="🔓 GIẢI MÃ DỮ LIỆU" FontSize="16" FontWeight="Bold"
+               Foreground="#0D47A1" Margin="0,0,0,5" TextAlignment="Center" HorizontalAlignment="Center"/>
+
+            <!-- Khung nội dung -->
+            <Border Background="#FFFFCDD2" CornerRadius="15" Padding="10" Margin="5,0,5,5" MinHeight="500" Height="509">
+                <StackPanel>
+                    <TextBlock Text="Bản mã (để giải mã):" Margin="0,0,0,5" FontWeight="Bold"/>
+                    <TextBox x:Name="txtCipherText" Height="126" FontSize="14"
+                     AcceptsReturn="True" TextWrapping="Wrap"
+                     Background="White" Padding="5"/>
+                    <Button Content="Mở File" Width="100" Height="30" Margin="10,10,0,0"
+                     Background="#FF6A1B9A" Foreground="White" Click="btnOpenFile2_Click"/>
+                    <Button Content="Giải mã" Width="100" Height="30" Margin="0,10,0,0"
+                    Background="#FFD32F2F" Foreground="White" Click="btnDecrypt_Click"/>
+                    <TextBlock Text="Bản rõ (sau giải mã):" Margin="0,10,0,5" FontWeight="Bold"/>
+                    <TextBox x:Name="txtDecryptedText" Height="131" FontSize="14"
+                     AcceptsReturn="True" TextWrapping="Wrap"
+                     Background="White" Padding="5" IsReadOnly="True"/>
+                    <Button Content="Lưu File" Width="120" Height="30" Background="#FF0288D1" Foreground="White" Click="btnSaveFile2_Click" Margin="20"/>
+                    <Button Content="Kiểm tra kết quả" Width="150" Height="30"
+                    Background="#FF00796B" Foreground="White"
+                    Click="btnKiemTraKetQua_Click" Margin="-10"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+    </Grid>
+</Window>
