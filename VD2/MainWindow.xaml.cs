@@ -54,7 +54,9 @@ namespace VD2
         private string originalEncryptedText = "";
         private bool isFirstEncrypt = true;
 
-
+        //Khóa bí mật thay đổi
+        private string originalPrivateKey = "";
+        private bool isPrivateKeyChangedNotified = false;
 
         public MainWindow()
         {
@@ -485,7 +487,7 @@ namespace VD2
             if (string.IsNullOrEmpty(plainText) || string.IsNullOrEmpty(decryptedText))
             {
                 MessageBox.Show("Vui lòng đảm bảo rằng cả bản rõ và kết quả sau giải mã đều có nội dung.",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -534,28 +536,28 @@ namespace VD2
             // Kiểm tra cả hai ô trống
             if (string.IsNullOrEmpty(hexKey) && string.IsNullOrEmpty(input))
             {
-                MessageBox.Show("Vui lòng nhập khóa và bản rõ trước khi mã hóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Vui lòng nhập khóa và bản rõ trước khi mã hóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             // Kiểm tra chỉ thiếu khóa
             if (string.IsNullOrEmpty(hexKey))
             {
-                MessageBox.Show("Chưa nhập khóa. Vui lòng nhập khóa trước khi mã hóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Chưa nhập khóa. Vui lòng nhập khóa trước khi mã hóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             // Kiểm tra chỉ thiếu bản rõ
             if (string.IsNullOrEmpty(input))
             {
-                MessageBox.Show("Chưa nhập bản rõ. Vui lòng nhập bản rõ trước khi mã hóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Chưa nhập bản rõ. Vui lòng nhập bản rõ trước khi mã hóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             // Kiểm tra độ dài khóa
             if (hexKey.Length != 16)
             {
-                MessageBox.Show("Khóa phải có đúng 16 ký tự hex (64 bit)", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Khóa phải có đúng 16 ký tự hex (64 bit)", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -632,7 +634,8 @@ namespace VD2
 
         private void btnDecrypt_Click(object sender, RoutedEventArgs e)
         {
-            string hexKey = txtKey.Text.Trim();
+            //string hexKey = txtKey.Text.Trim();
+            string hexKey = txtKeyPrivate.Text.Trim();
             string hexEncrypted = txtCipherText.Text.Trim();
 
             try
@@ -1113,6 +1116,28 @@ namespace VD2
             txtKey.Background = Brushes.White;
 
             
+        }
+
+        private void txtKeyPrivate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (txtKeyPrivate == null) return;
+
+            string currentPrivateKey = txtKeyPrivate.Text.Trim();
+
+            if (!string.IsNullOrEmpty(originalPrivateKey) && currentPrivateKey != originalPrivateKey && !isPrivateKeyChangedNotified)
+            {
+                MessageBox.Show("Khóa bí mật đã bị thay đổi!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                isPrivateKeyChangedNotified = true;
+            }
+        }
+
+        private void btnChuyenKhoa_Click(object sender, RoutedEventArgs e)
+        {
+            txtKeyPrivate.Text = txtKey.Text;
+
+            // ⚠️ Cập nhật lại gốc để theo dõi thay đổi chính xác
+            originalPrivateKey = txtKeyPrivate.Text.Trim();
+            isPrivateKeyChangedNotified = false;
         }
     }
 }

@@ -39,13 +39,13 @@
 
             <!-- Khung chính -->
             <Border Background="#FFB3E5FC" CornerRadius="15" Padding="10" Margin="5,20,5,5" Height="418">
-                <StackPanel VerticalAlignment="Center">
+                <StackPanel VerticalAlignment="Center" Height="300">
                     <!-- Chế độ nhập khóa -->
                     <TextBlock Text="Chế độ nhập khóa:" FontWeight="Bold"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,10">
-                        <RadioButton x:Name="rdoNhapTay" Content="Nhập tay" Margin="0,0,10,0" 
+                        <RadioButton x:Name="rdoNhapTay" Content="Thủ công" Margin="0,0,10,0" 
                              IsChecked="True" Checked="rdo_Checked"/>
-                        <RadioButton x:Name="rdoSinhTuDong" Content="Sinh tự động" Checked="rdo_Checked"/>
+                        <RadioButton x:Name="rdoSinhTuDong" Content="Tự động" Checked="rdo_Checked"/>
                     </StackPanel>
 
                     <!-- Nhập khóa -->
@@ -61,11 +61,18 @@
                     Click="btnGenerateKey_Click" Width="197"/>
 
                     <!-- Nút Reset -->
-                    <Button Content="Reset" Height="31" Width="120" Margin="45,10,45,0"
+                    <Button Content="Reset" Height="31" Width="120" Margin="45,10,45,10"
                     Background="#FFDCE775" Foreground="Black"
                     BorderBrush="#FBC02D" BorderThickness="1"
                     FontWeight="Bold" Click="btnReset_Click"
                     HorizontalAlignment="Center" Cursor="Hand"/>
+                    <Button Content="Chuyển khóa" Height="31" Width="120" Margin="45,5,45,10"
+        Background="#FFE1BEE7" Foreground="Black"
+        BorderBrush="#BA68C8" BorderThickness="1"
+        FontWeight="Bold" Click="btnChuyenKhoa_Click"
+        HorizontalAlignment="Center" Cursor="Hand"/>
+
+
                 </StackPanel>
             </Border>
         </StackPanel>
@@ -121,10 +128,14 @@
                      Background="White" Padding="5"/>
                     <Button Content="Mở File" Width="100" Height="30" Margin="10,10,0,0"
                      Background="#FF6A1B9A" Foreground="White" Click="btnOpenFile2_Click"/>
-                    <Button Content="Giải mã" Width="100" Height="30" Margin="0,10,0,0"
+                    <Button Content="Giải mã" Width="100" Height="30" Margin="0,10,0,5"
                     Background="#FFD32F2F" Foreground="White" Click="btnDecrypt_Click"/>
+                    <TextBlock TextWrapping="Wrap" Text="Khóa bí mật:" Width="287" FontWeight="Bold"/>
+                    <TextBox x:Name="txtKeyPrivate"  Height="33" TextWrapping="Wrap" Width="288"
+                             TextChanged="txtKeyPrivate_TextChanged"
+                            />
                     <TextBlock Text="Bản rõ (sau giải mã):" Margin="0,10,0,5" FontWeight="Bold"/>
-                    <TextBox x:Name="txtDecryptedText" Height="131" FontSize="14"
+                    <TextBox x:Name="txtDecryptedText" Height="74" FontSize="14"
                      AcceptsReturn="True" TextWrapping="Wrap"
                      Background="White" Padding="5" IsReadOnly="True"/>
                     <Button Content="Lưu File" Width="120" Height="30" Background="#FF0288D1" Foreground="White" Click="btnSaveFile2_Click" Margin="20"/>
